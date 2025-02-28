@@ -1,0 +1,501 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hbd  kim zee! 🌴🎉</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Custom Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-35px); }
+            100% { transform: translateY(0px); }
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            60% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        @keyframes confettiFall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px #fff, 0 0 20px #ff6f61, 0 0 30px #ff6f61; }
+            50% { text-shadow: 0 0 20px #fff, 0 0 30px #ff6f61, 0 0 40px #ff6f61; }
+            100% { text-shadow: 0 0 10px #fff, 0 0 20px #ff6f61, 0 0 30px #ff6f61; }
+        }
+        @keyframes slideIn {
+            0% { transform: translateX(-100%); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 5px #26c6da; }
+            50% { box-shadow: 0 0 25px #26c6da; }
+            100% { box-shadow: 0 0 5px #26c6da; }
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+        .balloon { animation: float 4s ease-in-out infinite; }
+        .spin { animation: spin 6s linear infinite; }
+        .bounce-in { animation: bounceIn 1s ease-out; }
+        .confetti {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            opacity: 0.9;
+            animation: confettiFall 5s linear infinite;
+        }
+        .glow { animation: glow 2s infinite; }
+        .slide-in { animation: slideIn 0.5s ease-out; }
+        .pulse-glow { animation: pulseGlow 2s infinite; }
+        .fade-in { animation: fadeIn 1s ease-in; }
+        .shake { animation: shake 0.5s ease-in-out; }
+        .gallery-img { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .gallery-img:hover { transform: scale(1.05); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 1000; }
+        .modal-content { position: relative; margin: 10% auto; width: 90%; max-width: 600px; }
+        .card { transition: transform 0.3s ease, background-color 0.3s ease; }
+        .card:hover { transform: translateY(-10px); background-color: #fffaf0; }
+        .notification { position: fixed; top: 20px; right: 20px; z-index: 2000; }
+        .hidden { display: none; }
+        .gift-box { cursor: pointer; transition: transform 0.3s ease; }
+        .gift-box:hover { transform: scale(1.1); }
+
+        /* Responsive Adjustments */
+        @media (max-width: 640px) {
+            .container { padding: 4px; margin-top: 4px; margin-bottom: 4px; max-width: 100%; }
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 1.5rem; }
+            .text-3xl { font-size: 1.25rem; }
+            .text-4xl { font-size: 1.5rem; }
+            .balloon { width: 48px; height: 48px; }
+            .flex.space-x-8 { flex-wrap: wrap; gap: 8px; justify-content: center; }
+            #countdown { flex-direction: column; gap: 8px; }
+            #countdown div { padding: 8px; font-size: 0.875rem; }
+            .cake-section img { width: 120px; height: 120px; }
+            .gallery-img { width: 100%; height: auto; }
+            .grid-cols-4 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+            .grid-cols-2 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+            .sm\\:flex-row { flex-direction: column; }
+            .sm\\:space-x-4 { gap: 8px; }
+            button { padding: 8px 16px; font-size: 0.875rem; }
+            .gift-box { width: 80px; height: 80px; }
+            .notification { top: 10px; right: 10px; font-size: 0.75rem; padding: 8px; }
+        }
+        @media (min-width: 641px) and (max-width: 768px) {
+            .container { padding: 6px; max-width: 90%; }
+            h1 { font-size: 4rem; }
+            h2 { font-size: 2rem; }
+            .balloon { width: 64px; height: 64px; }
+            #countdown { flex-direction: row; gap: 12px; }
+            .gallery-img { width: 100%; height: auto; }
+            .grid-cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-orange-400 via-pink-400 to-teal-500 min-h-screen font-sans overflow-x-hidden">
+    <!-- Background Music -->
+    <audio id="bg-music" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+    </audio>
+
+    <!-- Main Container -->
+    <div class="container mx-auto p-8 max-w-6xl bg-white bg-opacity-85 rounded-3xl shadow-2xl mt-10 mb-10">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-8xl sm:text-6xl font-extrabold text-red glow mb-4">Hbd,  kim zee!</h1>
+            <p class="text-3xl sm:text-2xl text-teal-800 italic">A Tropical Fiesta Just for You! 🌴🎉</p>
+        </header>
+
+        <!-- Countdown Timer -->
+        <section class="text-center mb-12">
+            <h2 class="text-4xl font-semibold text-pink-600 mb-4">Countdown to Your Sunset Party!</h2>
+            <div id="countdown" class="flex justify-center space-x-6 sm:space-x-4 text-white">
+                <div class="bg-orange-600 p-6 sm:p-4 rounded-lg shadow-md"><span id="hours">00</span><br>Hours</div>
+                <div class="bg-pink-600 p-6 sm:p-4 rounded-lg shadow-md"><span id="minutes">00</span><br>Minutes</div>
+                <div class="bg-teal-600 p-6 sm:p-4 rounded-lg shadow-md"><span id="seconds">00</span><br>Seconds</div>
+            </div>
+        </section>
+
+        <!-- Cake Section -->
+        <section class="text-center mb-12 cake-section">
+            <h2 class="text-4xl font-semibold text-pink-600 mb-4">Your Tropical Birthday Cake!</h2>
+            <div class="relative">
+                <img src="https://img.icons8.com/color/120/000000/birthday-cake.png" alt="Cake" class="spin mx-auto w-52 h-52 sm:w-32 sm:h-32">
+                <i class="fas fa-fire text-orange-400 text-5xl sm:text-3xl absolute top-0 left-1/2 transform -translate-x-1/2 animate-pulse" id="candle"></i>
+            </div>
+            <button id="blow-candle" class="mt-6 bg-teal-500 text-white font-bold py-3 px-8 sm:py-2 sm:px-4 rounded-full hover:bg-teal-600 transition duration-300">Blow the Candle!</button>
+        </section>
+
+        <!-- Balloons Section -->
+        <section class="flex justify-center space-x-8 sm:space-x-2 mb-12 flex-wrap">
+            <img src="https://i.pinimg.com/236x/3e/ab/71/3eab71f278c18bf1d92e0a2998ca0332.jpg" alt="Balloon" class="balloon w-28 h-28 sm:w-16 sm:h-16" style="animation-delay: 0s;">
+            <img src="https://i.pinimg.com/236x/67/e4/00/67e400a6ec4685814d84cf37e035d034.jpg" alt="Balloon" class="balloon w-28 h-28 sm:w-16 sm:h-16" style="animation-delay: 1s;">
+            <img src="https://i.pinimg.com/236x/60/f7/98/60f798108ad0f821ae6e538d79a17dc5.jpg" alt="Balloon" class="balloon w-28 h-28 sm:w-16 sm:h-16" style="animation-delay: 2s;">
+            <img src="https://img.freepik.com/free-vector/balloons-coloured-outlines_78370-375.jpg?t=st=1740333247~exp=1740336847~hmac=f2bb16ef0478011c48f7cf39f793d871f3a339c518bc4d39d5aff748f42445ab&w=740" alt="Balloon" class="balloon w-28 h-28 sm:w-16 sm:h-16" style="animation-delay: 3s;">
+            <img src="https://img.freepik.com/premium-photo/fun-dinosaur-3d-illustration_183364-1042.jpg?semt=ais_hybrid" alt="Balloon" class="balloon w-28 h-28 sm:w-16 sm:h-16" style="animation-delay: 5s;">
+        </section>
+
+        <!-- Photo Gallery -->
+        <section class="mb-12">
+            <h2 class="text-4xl font-semibold text-pink-600 text-center mb-6">kim zee's Sunset Memories</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                <img src="https://i.pinimg.com/474x/87/51/84/87518480353fb934a7ce28b21fa70663.jpg" alt="Beach Party" class="gallery-img rounded-lg shadow-md cursor-pointer w-full h-auto">
+                <img src="https://i.pinimg.com/236x/9c/02/ce/9c02cea4223f1dc6609ead95d0f5d198.jpg" alt="Sunset Dance" class="gallery-img rounded-lg shadow-md cursor-pointer w-full h-auto">
+                <img src="https://i.pinimg.com/736x/95/e0/3d/95e03d97b144cdc698f25b0c00322291.jpg" alt="Cake Cut" class="gallery-img rounded-lg shadow-md cursor-pointer w-full h-auto">
+                <img src="https://i.pinimg.com/474x/8b/b3/95/8bb39570ededa9cfdf869dfb59e23ad9.jpg" alt="Friends Laugh" class="gallery-img rounded-lg shadow-md cursor-pointer w-full h-auto">
+            </div>
+        </section>
+
+        <!-- Guestbook -->
+        <section class="mb-12">
+            <h2 class="text-4xl font-semibold text-pink-600 text-center mb-6">Send  kim zee Tropical Wishes!</h2>
+            <form id="guestbook-form" class="bg-orange-100 p-6 rounded-lg shadow-md pulse-glow">
+                <div class="flex flex-col sm:flex-row sm:space-x-4 mb-4">
+                    <input type="text" id="guest-name" placeholder="Your Name" class="flex-1 p-3 rounded-lg border border-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                    <input type="email" id="guest-email" placeholder="Your Email (Optional)" class="flex-1 p-3 rounded-lg border border-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                </div>
+                <textarea id="guest-message" placeholder="Your Tropical Birthday Wish" rows="5" class="w-full p-3 mb-4 rounded-lg border border-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500"></textarea>
+                <button type="submit" class="bg-teal-500 text-white font-bold py-3 px-8 sm:py-2 sm:px-4 rounded-full hover:bg-teal-600 transition duration-300">Send Wish</button>
+            </form>
+            <div class="mt-6 space-y-4 sm:space-y-2 text-center flex flex-col sm:flex-row sm:space-x-4 sm:space-y-0 justify-center">
+                <button id="copy-wishes" class="bg-orange-500 text-white py-2 px-6 sm:px-4 rounded-full hover:bg-orange-600 transition duration-300"><i class="fas fa-copy mr-2"></i>Copy Wishes</button>
+                <button id="paste-wishes-btn" class="bg-pink-500 text-white py-2 px-6 sm:px-4 rounded-full hover:bg-pink-600 transition duration-300"><i class="fas fa-paste mr-2"></i>Paste Wishes</button>
+                <button id="generate-url" class="bg-teal-500 text-white py-2 px-6 sm:px-4 rounded-full hover:bg-teal-600 transition duration-300"><i class="fas fa-link mr-2"></i>Share via URL</button>
+            </div>
+            <textarea id="paste-wishes" class="hidden w-full p-3 mt-2 rounded-lg border border-teal-300 focus:outline-none focus:ring-2 focus:ring-pink-500" placeholder="Paste wishes here..."></textarea>
+            <div id="guestbook-entries" class="mt-8 space-y-6"></div>
+        </section>
+
+        <!-- Gift Unwrapping Game -->
+        <section class="mb-12 text-center">
+            <h2 class="text-4xl font-semibold text-pink-600 mb-4">Unwrap Your Gift!</h2>
+            <div id="gift-box" class="gift-box mx-auto w-32 h-32 sm:w-20 sm:h-20 bg-orange-500 rounded-lg shadow-md flex items-center justify-center text-white text-2xl sm:text-xl">
+                <i class="fas fa-gift"></i>
+            </div>
+            <p id="gift-message" class="mt-4 text-teal-800 text-lg sm:text-base hidden">Surprise! You’ve got a tropical getaway voucher!</p>
+        </section>
+
+        <!-- Birthday Trivia Quiz -->
+        <section class="mb-12">
+            <h2 class="text-4xl font-semibold text-pink-600 text-center mb-6"> kim zee's Birthday Trivia</h2>
+            <div class="bg-orange-100 p-6 sm:p-4 rounded-lg shadow-md">
+                <p class="text-teal-800 mb-4 sm:text-sm">What’s  kim zee's favorite tropical fruit?</p>
+                <div class="space-y-2">
+                    <label class="flex items-center text-teal-700 text-sm"><input type="radio" name="trivia" value="mango" class="mr-2"> Mango</label>
+                    <label class="flex items-center text-teal-700 text-sm"><input type="radio" name="trivia" value="pineapple" class="mr-2"> Pineapple</label>
+                    <label class="flex items-center text-teal-700 text-sm"><input type="radio" name="trivia" value="coconut" class="mr-2"> Coconut</label>
+                </div>
+                <button id="submit-trivia" class="mt-4 bg-teal-500 text-white font-bold py-2 px-6 sm:px-4 rounded-full hover:bg-teal-600 transition duration-300">Submit Answer</button>
+                <p id="trivia-result" class="mt-4 text-teal-800 text-sm hidden"></p>
+            </div>
+        </section>
+
+        <!-- Fun Facts Section -->
+        <section class="mb-12">
+            <h2 class="text-4xl font-semibold text-pink-600 text-center mb-6"> kim zee's Tropical Traits</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="card bg-white p-6 sm:p-4 rounded-lg shadow-md">
+                    <h3 class="text-xl sm:text-lg font-bold text-orange-600">Island Explorer</h3>
+                    <p class="text-teal-700 text-sm">Loves discovering hidden beaches!</p>
+                </div>
+                <div class="card bg-white p-6 sm:p-4 rounded-lg shadow-md">
+                    <h3 class="text-xl sm:text-lg font-bold text-orange-600">Sunset Chaser</h3>
+                    <p class="text-teal-700 text-sm">Never misses a colorful sky!</p>
+                </div>
+                <div class="card bg-white p-6 sm:p-4 rounded-lg shadow-md">
+                    <h3 class="text-xl sm:text-lg font-bold text-orange-600">Flamingo Fan</h3>
+                    <p class="text-teal-700 text-sm">Adores all things pink and feathery!</p>
+                </div>
+                <div class="card bg-white p-6 sm:p-4 rounded-lg shadow-md">
+                    <h3 class="text-xl sm:text-lg font-bold text-orange-600">Lei Lover</h3>
+                    <p class="text-teal-700 text-sm">Rocking flower crowns like a pro!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Music Player -->
+        <section class="mb-12 text-center">
+            <h2 class="text-4xl font-semibold text-pink-600 mb-4"> kim zee's Sunset Playlist</h2>
+            <div class="bg-orange-100 p-6 sm:p-4 rounded-lg shadow-md inline-flex flex-col items-center">
+                <div class="flex space-x-4 sm:space-x-2">
+                    <button id="play-music" class="bg-teal-500 text-white py-3 px-8 sm:py-2 sm:px-4 rounded-full hover:bg-teal-600 transition duration-300"><i class="fas fa-play mr-2"></i>Play</button>
+                    <button id="pause-music" class="bg-pink-500 text-white py-3 px-8 sm:py-2 sm:px-4 rounded-full hover:bg-pink-600 transition duration-300"><i class="fas fa-pause mr-2"></i>Pause</button>
+                </div>
+                <div class="mt-4">
+                    <label for="volume-control" class="text-teal-700 text-sm">Volume:</label>
+                    <input type="range" id="volume-control" min="0" max="1" step="0.1" value="0.5" class="w-32 sm:w-24">
+                </div>
+            </div>
+        </section>
+
+        <!-- Celebrate Button -->
+        <section class="text-center mb-12">
+            <button id="confetti-btn" class="bg-teal-500 text-white font-bold py-4 px-10 sm:py-3 sm:px-6 rounded-full hover:bg-teal-600 transition duration-300 transform hover:scale-105 pulse-glow">
+                <i class="fas fa-gift mr-2"></i> Launch the Fiesta!
+            </button>
+        </section>
+
+        <!-- Birthday Quote -->
+        <section class="text-center mb-12">
+            <h2 class="text-4xl font-semibold text-pink-600 mb-4">A Tropical Toast to You</h2>
+            <blockquote class="bg-orange-100 p-6 sm:p-4 rounded-lg shadow-md text-teal-700 italic fade-in text-lg sm:text-base">
+                " kim zee, may your birthday be a sunset of joy, a wave of love, and a breeze of endless fun!"
+            </blockquote>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-teal-800 mt-12 text-sm">
+            <p>Made with 🌺 Aloha for  kim zee | © 2025 Tropical Birthday Bash</p>
+        </footer>
+    </div>
+
+    <!-- Modal for Gallery Images -->
+    <div id="gallery-modal" class="modal">
+        <div class="modal-content bg-white p-6 sm:p-4 rounded-lg">
+            <span id="close-modal" class="absolute top-2 right-2 text-3xl sm:text-2xl text-teal-600 cursor-pointer hover:text-teal-800">×</span>
+            <img id="modal-image" src="" alt="Modal Image" class="w-full rounded-lg">
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <!-- JavaScript -->
+    <script>
+        $(document).ready(function() {
+            // Fade In Container
+            $('.container').hide().fadeIn(2000);
+
+            // Countdown Timer
+            const birthdayTime = new Date("February 23, 2025 00:00:00").getTime();
+            const countdown = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = birthdayTime - now;
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                $('#hours').text(hours < 10 ? "0" + hours : hours);
+                $('#minutes').text(minutes < 10 ? "0" + minutes : minutes);
+                $('#seconds').text(seconds < 10 ? "0" + seconds : seconds);
+                if (distance < 0) {
+                    clearInterval(countdown);
+                    $('#countdown').html('<span class="text-4xl sm:text-2xl text-orange-500 font-bold">Aloha, It’s  kim zee's Day!</span>');
+                }
+            }, 1000);
+
+            // Blow Candle Interaction
+            $('#blow-candle').click(function() {
+                $('#candle').fadeOut(500, function() {
+                    $(this).removeClass('fa-fire').addClass('fa-smoking').fadeIn(500);
+                });
+                $(this).text('Candle Blown!').addClass('bg-orange-500').removeClass('bg-teal-500');
+                showNotification('Wish granted! 🌟');
+            });
+
+            // Confetti Effect
+            function createConfetti() {
+                const colors = ['#ff6f61', '#26c6da', '#ffcc00', '#ff4081', '#00e676', '#ffab40'];
+                for (let i = 0; i < 300; i++) {
+                    const confetti = $('<div class="confetti"></div>').css({
+                        left: Math.random() * 100 + 'vw',
+                        background: colors[Math.floor(Math.random() * colors.length)],
+                        animationDuration: (Math.random() * 3 + 2) + 's',
+                        animationDelay: (Math.random() * 2) + 's'
+                    });
+                    $('body').append(confetti);
+                    setTimeout(() => confetti.remove(), 5000);
+                }
+            }
+            $('#confetti-btn').click(function() {
+                createConfetti();
+                $(this).text('Fiesta Launched!').addClass('animate-pulse');
+                setTimeout(() => $(this).text('Launch the Fiesta!').removeClass('animate-pulse'), 2000);
+                showNotification('Party vibes unleashed! 🌴');
+            });
+
+            // Music Player
+            const music = $('#bg-music')[0];
+            $('#play-music').click(() => {
+                music.play();
+                showNotification('Tropical tunes on! 🎵');
+            });
+            $('#pause-music').click(() => {
+                music.pause();
+                showNotification('Music paused.');
+            });
+            $('#volume-control').on('input', function() {
+                music.volume = $(this).val();
+            });
+
+            // Gallery Modal
+            $('.gallery-img').click(function() {
+                $('#modal-image').attr('src', $(this).attr('src'));
+                $('#gallery-modal').fadeIn(300);
+            });
+            $('#close-modal').click(() => $('#gallery-modal').fadeOut(300));
+
+            // Guestbook with Sharing Options
+            function loadGuestbook() {
+                const entries = JSON.parse(localStorage.getItem('guestbook')) || [];
+                $('#guestbook-entries').empty();
+                entries.forEach(entry => {
+                    const card = $(`
+                        <div class="card bg-white p-6 sm:p-4 rounded-lg shadow-md slide-in">
+                            <p class="text-teal-800 text-sm"><strong>${entry.name}</strong> <span class="text-xs text-orange-500">(${entry.date})</span></p>
+                            <p class="text-teal-700 mt-2 text-sm">${entry.message}</p>
+                        </div>
+                    `);
+                    $('#guestbook-entries').append(card);
+                });
+            }
+            loadGuestbook();
+
+            // Load from URL Parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const sharedWishes = urlParams.get('wishes');
+            if (sharedWishes) {
+                try {
+                    const decodedWishes = JSON.parse(decodeURIComponent(atob(sharedWishes)));
+                    const currentEntries = JSON.parse(localStorage.getItem('guestbook')) || [];
+                    const mergedEntries = [...new Map([...currentEntries, ...decodedWishes].map(entry => [entry.date, entry])).values()];
+                    localStorage.setItem('guestbook', JSON.stringify(mergedEntries));
+                    loadGuestbook();
+                    showNotification('Wishes loaded from URL! 🌺');
+                } catch (error) {
+                    showNotification('Invalid URL data!', 'bg-red-500');
+                }
+            }
+
+            $('#guestbook-form').submit(function(e) {
+                e.preventDefault();
+                const name = $('#guest-name').val().trim();
+                const email = $('#guest-email').val().trim();
+                const message = $('#guest-message').val().trim();
+                if (name && message) {
+                    const date = new Date().toLocaleString();
+                    const entry = { name, email, message, date };
+                    const entries = JSON.parse(localStorage.getItem('guestbook')) || [];
+                    entries.unshift(entry);
+                    localStorage.setItem('guestbook', JSON.stringify(entries));
+                    loadGuestbook();
+                    $('#guest-name').val('');
+                    $('#guest-email').val('');
+                    $('#guest-message').val('');
+                    showNotification('Wish sent! Share with  kim zee! 🌴');
+                } else {
+                    showNotification('Name and message needed!', 'bg-red-500');
+                }
+            });
+
+            // Copy Wishes
+            $('#copy-wishes').click(function() {
+                const entries = JSON.parse(localStorage.getItem('guestbook')) || [];
+                const wishesText = JSON.stringify(entries);
+                navigator.clipboard.writeText(wishesText).then(() => {
+                    showNotification('Wishes copied! Send to  kim zee!');
+                }).catch(() => {
+                    showNotification('Copy failed!', 'bg-red-500');
+                });
+            });
+
+            // Paste Wishes
+            $('#paste-wishes-btn').click(function() {
+                $('#paste-wishes').toggleClass('hidden').focus();
+            });
+            $('#paste-wishes').on('input', function() {
+                try {
+                    const pastedWishes = JSON.parse($(this).val());
+                    const currentEntries = JSON.parse(localStorage.getItem('guestbook')) || [];
+                    const mergedEntries = [...new Map([...currentEntries, ...pastedWishes].map(entry => [entry.date, entry])).values()];
+                    localStorage.setItem('guestbook', JSON.stringify(mergedEntries));
+                    loadGuestbook();
+                    $(this).val('').addClass('hidden');
+                    showNotification('Wishes added! 🌺');
+                } catch (error) {
+                    showNotification('Invalid paste data!', 'bg-red-500');
+                }
+            });
+
+            // Generate Share URL
+            $('#generate-url').click(function() {
+                const entries = JSON.parse(localStorage.getItem('guestbook')) || [];
+                const encodedWishes = btoa(encodeURIComponent(JSON.stringify(entries)));
+                const baseUrl = window.location.href.split('?')[0];
+                const shareUrl = `${baseUrl}?wishes=${encodedWishes}`;
+                navigator.clipboard.writeText(shareUrl).then(() => {
+                    showNotification('URL copied! Share with  kim zee!');
+                }).catch(() => {
+                    showNotification('URL copy failed!', 'bg-red-500');
+                });
+            });
+
+            // Gift Unwrapping Game
+            $('#gift-box').click(function() {
+                $(this).addClass('shake').fadeOut(500, function() {
+                    $(this).removeClass('shake bg-orange-500').addClass('bg-teal-500').html('<i class="fas fa-star"></i>').fadeIn(500);
+                    $('#gift-message').removeClass('hidden').addClass('fade-in');
+                    showNotification('Gift unwrapped! Enjoy! 🎁');
+                });
+            });
+
+            // Birthday Trivia Quiz
+            $('#submit-trivia').click(function() {
+                const answer = $('input[name="trivia"]:checked').val();
+                if (answer) {
+                    const correctAnswer = 'pineapple'; // Customize as needed
+                    $('#trivia-result').removeClass('hidden').addClass('fade-in');
+                    if (answer === correctAnswer) {
+                        $('#trivia-result').text('Correct!  kim zee loves pineapples! 🍍').css('color', '#26c6da');
+                        showNotification('You got it right! 🎉');
+                    } else {
+                        $('#trivia-result').text('Oops! Try again, it’s pineapple! 🍍').css('color', '#ff6f61');
+                        showNotification('Not quite, but nice try!');
+                    }
+                } else {
+                    showNotification('Pick an answer first!', 'bg-red-500');
+                }
+            });
+
+            // Notification System
+            function showNotification(message, bgColor = 'bg-teal-500') {
+                const notification = $(`<div class="p-4 sm:p-2 ${bgColor} text-white rounded-lg shadow-lg">${message}</div>`).hide();
+                $('#notification').html(notification);
+                notification.fadeIn(300).delay(2000).fadeOut(300, () => notification.remove());
+            }
+
+            // Scroll Animations
+            $(window).scroll(function() {
+                $('.card').each(function() {
+                    const top = $(this).offset().top;
+                    const windowBottom = $(window).scrollTop() + $(window).height();
+                    if (top < windowBottom && !$(this).hasClass('slide-in')) {
+                        $(this).addClass('slide-in');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
